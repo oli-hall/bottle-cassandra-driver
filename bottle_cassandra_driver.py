@@ -40,6 +40,7 @@ class CassandraPlugin(object):
                  executor_threads=2,
                  max_schema_agreement_wait=10,
                  control_connection_timeout=2.0,
+                 row_factory=None,
                  **kwargs):
         self.cluster = Cluster(endpoints,
                                port=port,
@@ -61,6 +62,8 @@ class CassandraPlugin(object):
                                )
         self.keyspace = keyspace
         self.connection = self.cluster.connect(self.keyspace)
+        if row_factory:
+            self.connection.row_factory = row_factory
         self.consistency_level = consistency_level
         self.name = "cqlconnection"
         self.keyword = keyword
